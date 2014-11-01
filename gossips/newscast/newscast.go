@@ -9,6 +9,7 @@ type Newscast struct {
 
 func NewNewscast() (newscast *Newscast, config *core.Config) {
 	config = core.NewConfig()
+	config.NodeCnt = uint16(5000)
 
 	return &Newscast{}, config
 }

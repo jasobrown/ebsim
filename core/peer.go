@@ -19,7 +19,6 @@ package core
 
 import (
 	"net"
-	//	"github.com/jasobrown/ebsim/node"
 )
 
 type VersionedValue struct {
@@ -27,42 +26,43 @@ type VersionedValue struct {
 	version uint32
 }
 
-type Node struct {
+type Peer struct {
 	Addr       net.TCPAddr
-	generation uint64
-	heartbeat  uint32
+	Generation uint64
+	Heartbeat  uint32
 
 	valueGenerator uint32
 
 	// app state varibles
-	datacenter *VersionedValue
-	rack       *VersionedValue
+	Datacenter *VersionedValue
+	Rack       *VersionedValue
 	// add more states here, if you care ....
 
-	// state to represent if this node is GC'ing or blocked or just unresponsive
-	Health NodeHealth
+	// state to represent if this peer is GC'ing or blocked or just unresponsive
+	Health PeerHealth
+	chan 
 }
 
-type NodeHealth struct {
-	state NodeState
+type PeerHealth struct {
+	state PeerState
 }
 
-type NodeState int
+type PeerState int
 
 const (
-	NodeHealthy NodeState = iota
-	NodeBlocked
-	NodeDown
+	PeerHealthy PeerState = iota
+	PeerBlocked
+	PeerDown
 )
 
-func (node *Node) NextRound() {
-	node.determineHealth()
+func (peer *Peer) NextRound() {
+	peer.determineHealth()
 }
 
-// statistically determine if this node should be in a blocked state, like GC or process blocked,
+// statistically determine if this peer should be in a blocked state, like GC or process blocked,
 // or update an existing blocked state
-func (node *Node) determineHealth() {
-	if node.Health.state == NodeHealthy {
+func (peer *Peer) determineHealth() {
+	if peer.Health.state == PeerHealthy {
 		// determine if we should go into an unhealthy state
 	} else {
 		// determine if we should go back to healthy

@@ -22,15 +22,20 @@ import (
 )
 
 type Dispatcher struct {
-	nodes map[*net.TCPAddr]*Node
+	peers  map[*net.TCPAddr]*Peer
+	config *Config
 }
 
-func NewDispatcher() *Dispatcher {
-	return &Dispatcher{}
+func NewDispatcher(config *Config) *Dispatcher {
+	return &Dispatcher{config: config, peers: make(map[*net.TCPAddr]*Peer)}
+}
+
+func (dispatcher *Dispatcher) AddPeer(peer *Peer) {
+	dispatcher.peers[&peer.Addr] = peer
 }
 
 func (dispatcher *Dispatcher) NextRound() {
-	for _, node := range dispatcher.nodes {
-		node.NextRound()
+	for _, peer := range dispatcher.peers {
+		peer.NextRound()
 	}
 }

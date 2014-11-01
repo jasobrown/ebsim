@@ -18,15 +18,18 @@
 package core
 
 type Config struct {
-	nodeCnt     uint16
-	datacenters uint8
-	racksPerDc  uint8
-	rounds      uint8
+	Port        uint16
+	NodeCnt     uint16
+	Datacenters uint8
+	RacksPerDc  uint8
+	Rounds      uint8
+	SeedCnt     uint8
 }
 
 func NewConfig() *Config {
 	return &Config{
-		nodeCnt: 1,
-		rounds:  10,
+		NodeCnt: 1,
+		Rounds:  10,
+		Port:    8997,
 	}
 }

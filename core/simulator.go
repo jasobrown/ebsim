@@ -17,10 +17,33 @@
  */
 package core
 
-func SimulatorStart(protocol Gossiper, config *Config) {
-	//	dispatcher := NewDispatcher()
+import (
+	"fmt"
+	"net"
+)
 
-	//	for i := 0, i < config.rounds, i++ {
-	//		config.round = i
-	//	}
+func SimulatorStart(protocol Gossiper, config *Config) {
+	dispatcher := NewDispatcher(config)
+
+	//TODO: allow a more dynamic/gradual method for bringing up nodes, but, for now, spawn them all at once
+	fourthOctet := 0
+	thirdOctet := 0
+	cnt := int(config.NodeCnt)
+	for i := 0; i < cnt; i++ {
+		fourthOctet++
+		if fourthOctet == 256 {
+			thirdOctet++
+			fourthOctet = 1
+		}
+		ip := fmt.Sprintf("127.0.%d.%d:%d", thirdOctet, fourthOctet, config.Port)
+		//		fmt.Println("next addr = ", ip)
+		addr, err := net.ResolveTCPAddr("tcp", ip)
+		//TODO: evaluate error
+		if err != nil {
+			fmt.Println("error = \n", err)
+		}
+
+		peer := &Peer{Addr: *addr}
+		dispatcher.AddPeer(peer)
+	}
 }
